@@ -33,11 +33,12 @@ img: "images/img-4.jpg"
 },
 ];
 
-let basket = [];
+let basket = JSON.parse(localStorage.getItem("data")) || [];
 
 let generateShop = () => {
     return ( shop.innerHTML = shopItemsData.map((x) => {
         let { id, name, price, desc, img} = x;
+        let search = basket.find((x) => x.id === id) || [ ]
         return `  <div id=product-id-${id} class="items">
         <img  width="220" src="${img}" alt="">
         <div class="details">
@@ -47,7 +48,7 @@ let generateShop = () => {
                 <h2>$ ${price} </h2>
                 <div class="buttons">
                     <i  onclick= "decrement(${id})" class="bi bi-dash-lg"></i>
-                    <div id=${id} class="quantity">0</div>
+                    <div id=${id} class="quantity">${search.item === undefined? 0: search.item}</div>
                     <i  onclick= "increment(${id})" class="bi bi-plus-lg"></i>
                 </div>
             </div>
@@ -72,7 +73,7 @@ if (search === undefined){
     search.item += 1;
 }
 
-
+localStorage.setItem("data", JSON.stringify(basket))
 //  console.log (basket)
  update(selectedItem.id);
 };
@@ -84,7 +85,7 @@ if (search.item === 0) return;
     search.item -= 1;
 }
 
-
+localStorage.setItem("data", JSON.stringify(basket))
 //  console.log (basket)
  update(selectedItem.id);
 
@@ -103,3 +104,5 @@ calculation()
 cartIcon.innerHTML = basket.map((x) => x.item).reduce((x,y) => x + y,0)
     console.log (basket )
  }
+
+ calculation();
